@@ -1,0 +1,5 @@
+(,,def,main(args:,Array[String]),{,1)
+(C,4)
+(,,,,println("input,file,",+,inputFile),1)
+(,,,,//,Load,the,input,1)
+(import,org.apache.spark.SparkContext._,1)

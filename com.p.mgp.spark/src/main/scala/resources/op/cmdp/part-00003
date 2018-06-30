@@ -1,0 +1,6 @@
+(,,,,//,split,up,into,word,1)
+(,,},1)
+(import,org.apache.spark.SparkConf,1)
+(,,*/,1)
+(E,4)
+(,,,,val,dat,=,cont.map(_.split("\\s+")(0)),1)

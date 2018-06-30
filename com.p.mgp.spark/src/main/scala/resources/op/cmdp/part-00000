@@ -1,0 +1,7 @@
+(,,,,println(counts.count()),1)
+(B,4)
+(,,,,val,rdd,=,new,SparkConf().setAppName("WordCountExample").setMaster("local"),1)
+(,13)
+(,,,,println(s"output,file,=>,$outputFile"),1)
+(,,,,println(dat.filter(_.contains("val")).count(),+,"val"),1)
+(,,,,//,transform,into,word,and,count,1)

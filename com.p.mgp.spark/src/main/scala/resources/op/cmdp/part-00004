@@ -1,0 +1,5 @@
+(import,org.apache.spark.SparkContext,1)
+(,,,,counts.saveAsTextFile(outputFile),1)
+(,,,,//,args(1):,/home/ubuntu,/output/spark.save.file.output/<mgp6>,1)
+(//,,,,dat.cache(),1)
+(,,,,//,args(0):/,home/ubuntu/input/words.count/Mgpspark-1.4-SQL-and-DataFrames.txt,1)

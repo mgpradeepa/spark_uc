@@ -14,10 +14,10 @@ object WC {
 //    args(0) = "/Users/mgpradeepa/Documents/workspace/com.p.mgp.spark/src/main/scala/resources/dummy"
 //    args(1) = "/Users/mgpradeepa/Documents/workspace/com.p.mgp.spark/src/main/scala/resources/op"
 
-    val inputFile = "/Users/mgpradeepa/Documents/workspace/com.p.mgp.spark/src/main/scala/resources/ip"
+    val inputFile = "/Users/mgpradeepa/Public/mgp_gitter/spark_git/spark_uc/com.p.mgp.spark/src/main/scala/resources/ip"
     println(s"input file  $inputFile")
 
-    val outputFile = "/Users/mgpradeepa/Documents/workspace/com.p.mgp.spark/src/main/scala/resources/op" //args(1)
+    val outputFile = "/Users/mgpradeepa/Public/mgp_gitter/spark_git/spark_uc/com.p.mgp.spark/src/main/scala/resources/op" //args(1)
     println(s"output file => $outputFile")
 
     val rdd = new SparkConf().setAppName("WC").setMaster("local")
@@ -30,6 +30,8 @@ object WC {
     val words = inp.flatMap { line => line.split(",") } //line.split("\\s+")
     // transform into word and count
     val counts = words.map(word => (word, 1)).reduceByKey { case (x, y) => x + y }
+    val countsTransform = words.map(word => (word, 1))
+    val countsAction = countsTransform.reduceByKey { case (x, y) => x + y }
 
     val cont = inp.filter(_.startsWith("v"))
     val dat = cont.map(_.split("\\s+")(0))

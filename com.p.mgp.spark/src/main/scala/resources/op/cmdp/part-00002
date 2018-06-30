@@ -1,0 +1,6 @@
+(,,*,Created,by,pradeepm.gireesha,on,3/4/2016.,1)
+(,,,,val,counts,=,words.map(word,=>,(word,,1)).reduceByKey,{,case,(x,,y),=>,x,+,y,},1)
+(,,,,val,inputFile,=,args(0),1)
+(,,,,val,outputFile,=,args(1),1)
+(,,,,println(dat.filter(_.contains("var")).count(),+,"var"),1)
+(D,2)
