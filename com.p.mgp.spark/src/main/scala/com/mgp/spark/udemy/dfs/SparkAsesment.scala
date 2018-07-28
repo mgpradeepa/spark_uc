@@ -7,11 +7,12 @@ import org.apache.spark.sql.SparkSession
 object SparkAsesment {
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().getOrCreate()
+    val spark = SparkSession.builder().master("local").appName("DFS").getOrCreate()
 
-    val df = spark.read.option("header","true").option("inferSchema","true").csv("resources/Netflix.csv")
+    val df = spark.read.option("header","true").option("inferSchema","true").csv("/root/Documents/mycodes/Spark_WO/spark_uc/com.p.mgp.spark/src/main/resources/Netflix.csv")
 
     df.columns
+    df.show()
   }
 
 
