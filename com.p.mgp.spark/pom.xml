@@ -5,7 +5,11 @@
 	<groupId>FirstSparkProject</groupId>
 	<artifactId>com.p.mgp.spark</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<modules>
+		<module>kafka_spark_streams</module>
+		<module>kafka_actions</module>
+	</modules>
+	<packaging>pom</packaging>
 
 	<name>com.p.mgp.spark</name>
 	<url>http://maven.apache.org</url>
