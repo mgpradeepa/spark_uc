@@ -8,6 +8,16 @@
     <artifactId>com.mgp.bd.kafka_actions</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>FirstSparkProject</groupId>
+            <artifactId>kafka-spark-commons</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
-    
+
+    </dependencies>
+
+
+
 </project>

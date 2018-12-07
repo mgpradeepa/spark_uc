@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        <artifactId>kafka_spark_bundle_installer</artifactId>
+        <groupId>FirstSparkProject</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>../kafka_spark_streams</module>
+        <!--<module>../kafka_actions</module>-->
+        <module>../kafka-spark-commons</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <name>kafka_spark_bundle</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scala.version>2.11.0</scala.version>
+        <spark.version>2.3.1</spark.version>
+    </properties>
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>2.11.0</scalaVersion>
+                    <args>
+                        <arg>-target:jvm-1.7</arg>
+                    </args>
+                </configuration>
+            </plugin>
+        </plugins>
+        <finalName>my_spark-0.1</finalName>
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <configuration>
+                    <scalaVersion>2.11.0</scalaVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>

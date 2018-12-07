@@ -8,6 +8,8 @@
 	<modules>
 		<module>kafka_spark_streams</module>
 		<module>kafka_actions</module>
+		<module>kafka-spark-commons</module>
+		<module>kafka_spark_bundle_installer</module>
 	</modules>
 	<packaging>pom</packaging>
 
@@ -39,27 +41,41 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-streaming-kafka_2.10</artifactId>
-			<version>0.9.0-incubating</version>
+			<artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+			<version>${spark.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-streaming_2.10</artifactId>
-			<version>1.3.1</version>
+			<artifactId>spark-streaming_2.11</artifactId>
+			<version>2.1.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-xml</artifactId>
 			<version>2.11.0-M4</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/com.typesafe.scala-logging/scala-logging -->
+		<dependency>
+			<groupId>com.typesafe.scala-logging</groupId>
+			<artifactId>scala-logging_2.11</artifactId>
+			<version>3.8.0</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.11</artifactId>
+			<version>0.10.1.1</version>
+		</dependency>
+
+
+
 	</dependencies>
 
 	<build>
