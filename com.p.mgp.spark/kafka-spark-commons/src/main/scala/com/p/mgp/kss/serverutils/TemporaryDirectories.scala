@@ -3,9 +3,9 @@ package com.p.mgp.kss.serverutils
 import java.io.File
 
 case class TemporaryDirectories (){
-  val tempRootPath = java.io.File.separator + "tmp" + java.io.File.separator + "SSWK"
+  val tempRootPath: String = java.io.File.separator + "tmp" + java.io.File.separator + "SSWK"
 
-  val checkpointPath = tempRootPath + File.separator + "checkpoints"
+  val checkpointPath: String = tempRootPath + File.separator + "checkpoints"
 
   private val rootDir = new File(tempRootPath)
 
@@ -16,11 +16,11 @@ case class TemporaryDirectories (){
   val zkSnapshotDir = new File(zkSnapshotPath)
   zkSnapshotDir.mkdir()
 
-  val zkLogDirPath = tempRootPath + File.separator + "zookeeper-logs"
+  val zkLogDirPath: String = tempRootPath + File.separator + "zookeeper-logs"
   val zkLogDir = new File(zkLogDirPath)
   zkLogDir.mkdir()
 
-  val kafkaLogDirPath = tempRootPath + File.separator + "kafka-logs"
+  val kafkaLogDirPath: String = tempRootPath + File.separator + "kafka-logs"
   val kafkaLogDir = new File(kafkaLogDirPath)
   kafkaLogDir.mkdir()
 
