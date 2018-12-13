@@ -46,11 +46,4 @@ case class EmbeddedZookeeper (port:Int, tempDirs : TemporaryDirectories){
       case None =>
     }
   }
-
-
-
-
-
-
-
 }
