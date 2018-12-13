@@ -38,10 +38,7 @@ case class GenericKafkaClient(kafkaServer : EmbeddedKafkaServer) {
       LOGGER.info("recieved {} so many messages",records.count())
 
       count = count + records.count()
-
-//      records.records(topic).forEach(rec => {
-//        println("*** [ " + rec.partition() + " ] " + rec.key() + ":" + rec.value())
-//      })
+      
        for(rec <- records.records(topic).asScala) {
          println("*** [ " + rec.partition() + " ] " + rec.key() + ":" + rec.value())
        }
