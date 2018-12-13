@@ -9,9 +9,8 @@ object SparkAsesment {
   def main(args: Array[String]): Unit = {
 
     val spark = SparkSession.builder().master("local").appName("Usecase1").getOrCreate()
-    ///Users/mgpradeepa/Public/mgp_gitter/spark_git/spark_uc/com.p.mgp.spark/src/main/resources
 
-    val df = spark.read.option("header","true").option("inferSchema","true").csv("/Users/mgpradeepa/Public/mgp_gitter/spark_git/spark_uc/com.p.mgp.spark/src/main/resources/Netflix.csv")
+    val df = spark.read.option("header","true").option("inferSchema","true").csv("../resources/Netflix.csv")
 
     df.columns
     df.show()
