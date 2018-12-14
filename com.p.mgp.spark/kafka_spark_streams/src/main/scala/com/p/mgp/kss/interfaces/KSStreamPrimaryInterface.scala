@@ -3,11 +3,13 @@ package com.p.mgp.kss.interfaces
 import java.util.Properties
 
 import com.p.mgp.kss.clients.kafka.GenericKafkaClient
+import com.p.mgp.kss.data.variety.{KafkaData, KafkaDataAsStringValue}
 import com.p.mgp.kss.serverutils.EmbeddedKafkaServer
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
+
+import scala.collection.mutable.ListBuffer
 
 class KSStreamPrimaryInterface {
   def main (args: Array[String]): Unit ={
@@ -18,7 +20,7 @@ class KSStreamPrimaryInterface {
     kafkaServer.createTopic(kafkaTopic,2)
 
 
-    val conf = new SparkConf().setAppName("DataStreaming").setMaster("local")
+    val conf = new SparkConf().setAppName("MGP_DataStreaming").setMaster("local")
     val sc = new SparkContext(conf);
 
     // consider the stream is going to send data every second
@@ -59,13 +61,21 @@ class KSStreamPrimaryInterface {
         val nu = 1 to max
 
         // get hold of the producer dude
-        val producer  = new KafkaProducer[String, String ](myClient.stringsProducer)
+        //val producer  = new KafkaProducer[String, String ](myClient.stringsProducer)
+//        myClient.send
 
         // untill the  max count keep producing the data
 
-        nu.foreach{ n =>
-          producer.send(new ProducerRecord(kafkaTopic, "key_" + n, "string_" + n))
-        }
+//        nu.foreach{ n =>
+//          producer.send(new ProducerRecord(kafkaTopic, "key_" + n, "string_" + n))
+//        }
+
+        var kafkaKeyValues = new ListBuffer[KafkaData]()
+        nu.foreach(n =>
+          kafkaKeyValues += KafkaDataAsStringValue("key_" + n , "value_" +n)
+        )
+        myClient.send(kafkaTopic, kafkaKeyValues)
+
         Thread.sleep(500)
         println("*** terminate streaming context")
 

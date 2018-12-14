@@ -1,23 +1,27 @@
 package com.p.mgp.kss.clients.kafka
 
 import java.util.Properties
-import scala.collection.JavaConverters._
 
+import com.p.mgp.kss.data.avro.{AvroGenericRecordSerializer, LongSerializer}
+import com.p.mgp.kss.data.variety.KafkaData
+
+import scala.collection.JavaConverters._
 import com.p.mgp.kss.serverutils.EmbeddedKafkaServer
 import com.typesafe.scalalogging.Logger
+import org.apache.avro.generic.{GenericContainer, GenericData, GenericRecord}
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
-import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
+import org.apache.kafka.common.serialization.{ByteArrayDeserializer, LongDeserializer, StringDeserializer, StringSerializer}
 
 case class GenericKafkaClient(kafkaServer : EmbeddedKafkaServer) {
 
   private val LOGGER = Logger[GenericKafkaClient]
   // sender or producer client
 
-  def send(topic : String, data : Seq[(String,String)]) : Unit = {
+  def send(topic : String, data : Seq[KafkaData]) : Unit = {
     val producer = new KafkaProducer[String, String ](stringsProducer)
     data.foreach(d => {
-      producer send new ProducerRecord(topic, d._1, d._2)
+      producer send new ProducerRecord(topic, d.key, d.value.toString)
     })
     producer.close()
   }
@@ -59,9 +63,22 @@ case class GenericKafkaClient(kafkaServer : EmbeddedKafkaServer) {
     config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer.getKafkaConnect)
     config
   }
+  def avroProducer :Properties = {
+    val config :Properties = new Properties
+    config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG , classOf[LongSerializer].getCanonicalName)
+    config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[AvroGenericRecordSerializer].getCanonicalName)
+    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer.getKafkaConnect)
+    config
+  }
 
   def consumeStrings :Properties = {
     GenericKafkaClient.stringsConsumer(kafkaServer)
+  }
+
+  def sendAvroData(topic : String, id: Long,  data : GenericContainer) : Unit = {
+    val producer = new KafkaProducer[Long, GenericContainer](avroProducer)
+    producer send new ProducerRecord(topic,id, data)
+    producer.close()
   }
 }
 
@@ -73,6 +90,16 @@ object GenericKafkaClient {
     consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, group)
     consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer].getCanonicalName)
     consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer].getCanonicalName)
+    consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, server.getKafkaConnect)
+    consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
+    consumerConfig
+  }
+
+  def avroConsumer (server: EmbeddedKafkaServer, group: String = "MGP_GROUP") :Properties = {
+    val consumerConfig : Properties = new Properties
+    consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, group)
+    consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, classOf[LongDeserializer].getCanonicalName)
+    consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, classOf[ByteArrayDeserializer].getCanonicalName)
     consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, server.getKafkaConnect)
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
     consumerConfig
