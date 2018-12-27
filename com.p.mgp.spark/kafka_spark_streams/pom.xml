@@ -30,8 +30,11 @@
             <version>2.3.1</version>
         </dependency>
 
-
-
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.8.0</version>
+        </dependency>
     </dependencies>
 
 
