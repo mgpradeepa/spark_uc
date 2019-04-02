@@ -89,10 +89,8 @@ class KSStreamPrimaryInterface {
       ssc.awaitTermination()
       println("Streaming terminated")
     }catch {
-      case e :Exception => {
+      case e :Exception =>
         println("*** Exception of streaming caught in monitor thread")
-
-      }
 
     }
     // stop spark
