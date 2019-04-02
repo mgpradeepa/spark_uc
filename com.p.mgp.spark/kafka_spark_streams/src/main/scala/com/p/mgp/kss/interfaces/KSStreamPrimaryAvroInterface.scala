@@ -4,13 +4,11 @@ import java.util.Properties
 
 import com.p.mgp.kss.clients.kafka.GenericKafkaClient
 import com.p.mgp.kss.data.avro.KSSAvroSchema
-import com.p.mgp.kss.data.variety.{KafkaData, KafkaDataAsAvro, KafkaDataAsStringValue}
 import com.p.mgp.kss.serverutils.EmbeddedKafkaServer
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
-
-import scala.collection.mutable.ListBuffer
+import org.apache.avro.generic.GenericContainer
 
 class KSStreamPrimaryAvroInterface {
 
@@ -23,28 +21,21 @@ class KSStreamPrimaryAvroInterface {
 
 
       val conf = new SparkConf().setAppName("MGP_DataStreaming").setMaster("local")
-      val sc = new SparkContext(conf);
+      val sc = new SparkContext(conf)
 
       // consider the stream is going to send data every second
       val ssc = new StreamingContext(sc, Seconds(1))
 
       val props : Properties = GenericKafkaClient.avroConsumer(kafkaServer)
 
+      // check how to obtain the consumer.
+//      private val consumerConnector = Consumer.create(props)
+
       val kafkaStream = KafkaUtils.createDirectStream(
         ssc,
         LocationStrategies.PreferConsistent,
-        ConsumerStrategies.Subscribe[String, String](java.util.Arrays.asList(kafkaTopic), props.asInstanceOf[java.util.Map[String, Object]]))
-      /*
-          now if the kafka stream has produced
-          a data it should be available in here so it should be considered as RDD and can be read
-       */
-      kafkaStream.foreachRDD { r => {
-        println("*** received an RDD of size " + r.count())
-        r.foreach(s => println(s))
+        ConsumerStrategies.Subscribe[Long, GenericContainer ](java.util.Arrays.asList(kafkaTopic), props.asInstanceOf[java.util.Map[String, Object]]))
 
-        if (r.count() > 0) r.glom().foreach(a => println("** partition size -> " + a.length))
-      }
-      }
       // start streaming
       ssc.start()
 
@@ -72,10 +63,8 @@ class KSStreamPrimaryAvroInterface {
         ssc.awaitTermination()
         println("Streaming terminated")
       }catch {
-        case e :Exception => {
+        case e :Exception =>
           println("*** Exception of streaming caught in monitor thread")
-
-        }
 
       }
       // stop spark
