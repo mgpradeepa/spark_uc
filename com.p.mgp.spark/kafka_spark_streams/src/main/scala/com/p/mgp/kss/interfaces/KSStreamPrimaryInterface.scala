@@ -11,7 +11,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable.ListBuffer
 
-class KSStreamPrimaryInterface {
+object KSStreamPrimaryInterface {
   def main (args: Array[String]): Unit ={
     val kafkaTopic = "ImpDATA"
 
@@ -89,10 +89,8 @@ class KSStreamPrimaryInterface {
       ssc.awaitTermination()
       println("Streaming terminated")
     }catch {
-      case e :Exception => {
+      case e :Exception =>
         println("*** Exception of streaming caught in monitor thread")
-
-      }
 
     }
     // stop spark
