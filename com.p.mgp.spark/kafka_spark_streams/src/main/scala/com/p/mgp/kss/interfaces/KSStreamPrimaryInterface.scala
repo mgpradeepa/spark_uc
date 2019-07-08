@@ -11,7 +11,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable.ListBuffer
 
-class KSStreamPrimaryInterface {
+object KSStreamPrimaryInterface {
   def main (args: Array[String]): Unit ={
     val kafkaTopic = "ImpDATA"
 

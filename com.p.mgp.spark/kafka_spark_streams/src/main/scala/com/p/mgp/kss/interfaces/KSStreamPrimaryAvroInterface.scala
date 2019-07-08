@@ -10,7 +10,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.avro.generic.GenericContainer
 
-class KSStreamPrimaryAvroInterface {
+object KSStreamPrimaryAvroInterface {
 
     def main (args: Array[String]): Unit ={
       val kafkaTopic = "ImpDATA"
