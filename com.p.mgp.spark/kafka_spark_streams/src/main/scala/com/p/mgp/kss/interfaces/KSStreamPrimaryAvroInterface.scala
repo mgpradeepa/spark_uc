@@ -34,8 +34,18 @@ object KSStreamPrimaryAvroInterface {
       val kafkaStream = KafkaUtils.createDirectStream(
         ssc,
         LocationStrategies.PreferConsistent,
-        ConsumerStrategies.Subscribe[Long, GenericContainer ](java.util.Arrays.asList(kafkaTopic), props.asInstanceOf[java.util.Map[String, Object]]))
+        ConsumerStrategies.Subscribe[String, String](java.util.Arrays.asList(kafkaTopic), props.asInstanceOf[java.util.Map[String, Object]]))
+      /*
+          now if the kafka stream has produced
+          a data it should be available in here so it should be considered as RDD and can be read
+       */
+      kafkaStream.foreachRDD { r => {
+        println("*** received an RDD of size " + r.count())
+        r.foreach(s => println(s))
 
+        if (r.count() > 0) r.glom().foreach(a => println("** partition size -> " + a.length))
+      }
+      }
       // start streaming
       ssc.start()
 
