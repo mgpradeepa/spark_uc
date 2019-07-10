@@ -1,0 +1,31 @@
+[
+  {
+      "namespace": "kss.mgp.com",
+      "type": "record",
+      "name": "IMP_DATA",
+      "fields": [
+        {
+          "name": "id",
+          "type": ["null", "long"]
+        },
+        {
+          "name": "datedOn",
+          "type": [
+            "null",
+            {
+              "type": "long",
+              "logicalType": "timestamp-millis"
+            }
+          ],
+          "default": null
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "subStatus",
+          "type": "string"
+        }
+   }
+ ]

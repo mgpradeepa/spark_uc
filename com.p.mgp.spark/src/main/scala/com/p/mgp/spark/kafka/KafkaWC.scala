@@ -3,7 +3,7 @@ package com.p.mgp.spark.kafka
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming._
-import org.apache.spark.streaming.kafka._
+import org.apache.spark.streaming.kafka010._
 
 /**
  * @author mgpradeepa
