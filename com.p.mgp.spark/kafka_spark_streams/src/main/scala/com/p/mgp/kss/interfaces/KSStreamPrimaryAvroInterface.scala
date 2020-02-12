@@ -4,20 +4,17 @@ import java.util.Properties
 
 import com.p.mgp.kss.clients.kafka.GenericKafkaClient
 import com.p.mgp.kss.data.avro.KSSAvroSchema
-import com.p.mgp.kss.data.variety.{KafkaData, KafkaDataAsAvro, KafkaDataAsStringValue}
 import com.p.mgp.kss.serverutils.EmbeddedKafkaServer
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.{SparkConf, SparkContext}
 
-import scala.collection.mutable.ListBuffer
-
-class KSStreamPrimaryAvroInterface {
+object KSStreamPrimaryAvroInterface {
 
     def main (args: Array[String]): Unit ={
       val kafkaTopic = "ImpDATA"
 
-      val kafkaServer = EmbeddedKafkaServer()
+      val kafkaServer = new EmbeddedKafkaServer()
       kafkaServer.start()
       kafkaServer.createTopic(kafkaTopic,2)
 

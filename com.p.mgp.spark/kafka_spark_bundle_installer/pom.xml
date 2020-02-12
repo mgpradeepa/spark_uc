@@ -17,11 +17,11 @@
     <name>kafka_spark_bundle</name>
     <url>http://maven.apache.org</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.version>2.11.0</scala.version>
-        <spark.version>2.3.1</spark.version>
-    </properties>
+<!--    <properties>-->
+<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
+<!--        <scala.version>2.11.0</scala.version>-->
+<!--        <spark.version>2.3.1</spark.version>-->
+<!--    </properties>-->
 
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
@@ -40,9 +40,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVersion>2.11.0</scalaVersion>
+                    <scalaVersion>2.11.12</scalaVersion>
                     <args>
-                        <arg>-target:jvm-1.7</arg>
+                        <arg>-target:jvm-1.8</arg>
                     </args>
                 </configuration>
             </plugin>
@@ -55,7 +55,7 @@
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
                 <configuration>
-                    <scalaVersion>2.11.0</scalaVersion>
+                    <scalaVersion>2.11.12</scalaVersion>
                 </configuration>
             </plugin>
         </plugins>

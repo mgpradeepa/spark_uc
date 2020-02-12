@@ -6,7 +6,7 @@ import java.net.InetSocketAddress
 import com.typesafe.scalalogging.Logger
 import org.apache.zookeeper.server.{NIOServerCnxnFactory, ServerCnxnFactory, ZooKeeperServer}
 
-case class EmbeddedZookeeper (port:Int, tempDirs : TemporaryDirectories){
+class EmbeddedZookeeper (port:Int, tempDirs : TemporaryDirectories){
   private val LOGGER = Logger[EmbeddedZookeeper]
 
   private var serverConnectionFactory : Option[ServerCnxnFactory] = None

@@ -16,7 +16,7 @@ import kafka.utils.ZkUtils
   */
 
 @throws[IOException]
-case class EmbeddedKafkaServer() {
+class EmbeddedKafkaServer() {
   private val LOGGER  = Logger[EmbeddedKafkaServer]
 
   val tempDirs = new TemporaryDirectories
