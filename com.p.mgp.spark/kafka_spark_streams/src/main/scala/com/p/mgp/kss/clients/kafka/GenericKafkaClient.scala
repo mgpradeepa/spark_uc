@@ -4,14 +4,14 @@ import java.util.Properties
 
 import com.p.mgp.kss.data.avro.{AvroGenericRecordSerializer, LongSerializer}
 import com.p.mgp.kss.data.variety.KafkaData
-
-import scala.collection.JavaConverters._
 import com.p.mgp.kss.serverutils.EmbeddedKafkaServer
 import com.typesafe.scalalogging.Logger
-import org.apache.avro.generic.{GenericContainer, GenericData, GenericRecord}
+import org.apache.avro.generic.GenericContainer
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, LongDeserializer, StringDeserializer, StringSerializer}
+
+import scala.collection.JavaConverters._
 
 case class GenericKafkaClient(kafkaServer : EmbeddedKafkaServer) {
 
@@ -44,14 +44,14 @@ case class GenericKafkaClient(kafkaServer : EmbeddedKafkaServer) {
       count = count + records.count()
 
 //      records.records(topic).forEach(rec => {
-//        println("*** [ " + rec.partition() + " ] " + rec.key() + ":" + rec.value())
+//        LOGGER.info("*** [ " + rec.partition() + " ] " + rec.key() + ":" + rec.value())
 //      })
        for(rec <- records.records(topic).asScala) {
-         println("*** [ " + rec.partition() + " ] " + rec.key() + ":" + rec.value())
+         LOGGER.info("*** [ " + rec.partition() + " ] " + rec.key() + ":" + rec.value())
        }
 
     }
-    println("*** got the expected number of messages")
+    LOGGER.info("*** got the expected number of messages")
 
     consumer.close()
   }
