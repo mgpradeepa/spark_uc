@@ -2,10 +2,12 @@ package com.p.mgp.kss.serverutils
 
 import scala.collection.JavaConversions._
 import java.io.IOException
+
 import com.typesafe.scalalogging.Logger
 import kafka.admin.TopicCommand
 import kafka.server.{KafkaConfig, KafkaServerStartable}
 import kafka.utils.ZkUtils
+import org.apache.kafka.common.security.JaasUtils
 
 
 /**
@@ -16,7 +18,7 @@ import kafka.utils.ZkUtils
   */
 
 @throws[IOException]
-case class EmbeddedKafkaServer() {
+class EmbeddedKafkaServer() {
   private val LOGGER  = Logger[EmbeddedKafkaServer]
 
   val tempDirs = new TemporaryDirectories
@@ -30,12 +32,12 @@ case class EmbeddedKafkaServer() {
 
   // Start zookeeper and then start the kafka
 
-  def start() :Unit  = {
+  def start()  {
 
     // for zookeeper
     LOGGER.info(s"Zookeeper starting on [$zkPort , $kbPort]")
     zookeeperHandle = Some(new EmbeddedZookeeper(zkPort, tempDirs))
-    zookeeperHandle.get.start()
+    zookeeperHandle.get.start
 
     // for kafka
 
@@ -68,7 +70,7 @@ case class EmbeddedKafkaServer() {
       case None =>
     }
     Thread.sleep(5000)
-    LOGGER.info(s"shutting down zookeeper on $zkPort")
+   LOGGER.info(s"shutting down zookeeper on $zkPort")
     zookeeperHandle match {
       case Some(zk) => {
         zk.stop()
@@ -82,15 +84,31 @@ case class EmbeddedKafkaServer() {
 
   // function to create the topics in kafka
   def createTopic(topic:String, partitions:Int=1,logAppendTime:Boolean=false ) :Unit = {
-    LOGGER.debug(s"Creating topic [ $topic ]")
-    val arguments = Array[String] (
-      "--create ",
+    LOGGER.info(s"Creating topic [ $topic ]")
+//    val arguments = Array[String] (
+//      "--create ",
+//      "--topic",
+//      topic
+//    ) ++ (
+//      if(logAppendTime) {
+//        Array[String]("--config", "message.timestamp.type=LogAppendTime")
+//      }else {
+//        Array[String]()
+//      }) ++ Array[String](
+//      "--partitions",
+//      "" + partitions,
+//      "--replication-factor",
+//      "1"
+//    )
+
+    val arguments = Array[String](
+      "--create",
       "--topic",
       topic
     ) ++ (
-      if(logAppendTime) {
+      if (logAppendTime) {
         Array[String]("--config", "message.timestamp.type=LogAppendTime")
-      }else {
+      } else {
         Array[String]()
       }) ++ Array[String](
       "--partitions",
@@ -100,15 +118,37 @@ case class EmbeddedKafkaServer() {
     )
     val opts = new TopicCommand.TopicCommandOptions(arguments)
     val zkUtils = ZkUtils.apply(getZkConnect,
-      zkSessionTimeout, zkConnectionTimeout, isZkSecurityEnabled = true)
+      zkSessionTimeout, zkConnectionTimeout,  JaasUtils.isZkSecurityEnabled)
 
-    TopicCommand.alterTopic(zkUtils, opts)
+    TopicCommand.createTopic(zkUtils, opts)
 
-    LOGGER.debug(s"Finished adding [$partitions] partitions to [$topic]")
+
+    def addPartitions(topic: String, partitions: Int) : Unit = {
+      LOGGER.info(s"Adding [$partitions] partitions to [$topic]")
+
+      val arguments = Array[String](
+        "--alter",
+        "--topic",
+        topic,
+        "--partitions",
+        "" + partitions
+      )
+
+      val opts = new TopicCommand.TopicCommandOptions(arguments)
+
+      val zkUtils = ZkUtils.apply(getZkConnect,
+        zkSessionTimeout, zkConnectionTimeout,
+        JaasUtils.isZkSecurityEnabled)
+
+      TopicCommand.alterTopic(zkUtils, opts)
+
+      LOGGER.info(s"Finished adding [$partitions] partitions to [$topic]")
+    }
+    LOGGER.info(s"Finished adding [$partitions] partitions to [$topic]")
 
   }
 
   def getKafkaConnect: String = "localhost:" + kbPort
 
- def getZkConnect :String = "localhost" +zkPort
+ def getZkConnect :String = "localhost:" +zkPort
 }

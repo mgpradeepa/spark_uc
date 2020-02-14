@@ -6,7 +6,7 @@ import java.net.InetSocketAddress
 import com.typesafe.scalalogging.Logger
 import org.apache.zookeeper.server.{NIOServerCnxnFactory, ServerCnxnFactory, ZooKeeperServer}
 
-case class EmbeddedZookeeper (port:Int, tempDirs : TemporaryDirectories){
+private [serverutils] class EmbeddedZookeeper (port:Int, tempDirs : TemporaryDirectories){
   private val LOGGER = Logger[EmbeddedZookeeper]
 
   private var serverConnectionFactory : Option[ServerCnxnFactory] = None
@@ -37,7 +37,7 @@ case class EmbeddedZookeeper (port:Int, tempDirs : TemporaryDirectories){
 
   // stop the zookeeper instance
   def stop():Unit = {
-    LOGGER.info(s"Stop the zookeepr conection")
+    LOGGER.info(s"Stop the zookeepr conection $port")
     serverConnectionFactory match {
       case Some(f) => {
         f.shutdown()

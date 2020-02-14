@@ -15,12 +15,12 @@ object KSStreamPrimaryInterface {
   def main (args: Array[String]): Unit ={
     val kafkaTopic = "ImpDATA"
 
-    val kafkaServer = EmbeddedKafkaServer()
+    val kafkaServer = new EmbeddedKafkaServer()
     kafkaServer.start()
     kafkaServer.createTopic(kafkaTopic,2)
 
 
-    val conf = new SparkConf().setAppName("MGP_DataStreaming").setMaster("local")
+    val conf = new SparkConf().setAppName("MGP_DataStreaming").setMaster("local[2]")
     val sc = new SparkContext(conf);
 
     // consider the stream is going to send data every second
@@ -61,7 +61,7 @@ object KSStreamPrimaryInterface {
         val nu = 1 to max
 
         // get hold of the producer dude
-        //val producer  = new KafkaProducer[String, String ](myClient.stringsProducer)
+//        val producer  = new KafkaProducer[String, String ](myClient.stringsProducer)
 //        myClient.send
 
         // untill the  max count keep producing the data
@@ -76,7 +76,7 @@ object KSStreamPrimaryInterface {
         )
         myClient.send(kafkaTopic, kafkaKeyValues)
 
-        Thread.sleep(500)
+        Thread.sleep(50000)
         println("*** terminate streaming context")
 
 
@@ -89,8 +89,10 @@ object KSStreamPrimaryInterface {
       ssc.awaitTermination()
       println("Streaming terminated")
     }catch {
-      case e :Exception =>
+      case e :Exception => {
         println("*** Exception of streaming caught in monitor thread")
+
+      }
 
     }
     // stop spark

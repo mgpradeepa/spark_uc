@@ -5,31 +5,27 @@ import java.util.Properties
 import com.p.mgp.kss.clients.kafka.GenericKafkaClient
 import com.p.mgp.kss.data.avro.KSSAvroSchema
 import com.p.mgp.kss.serverutils.EmbeddedKafkaServer
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
-import org.apache.avro.generic.GenericContainer
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.{SparkConf, SparkContext}
 
 object KSStreamPrimaryAvroInterface {
 
     def main (args: Array[String]): Unit ={
       val kafkaTopic = "ImpDATA"
 
-      val kafkaServer = EmbeddedKafkaServer()
+      val kafkaServer = new EmbeddedKafkaServer()
       kafkaServer.start()
       kafkaServer.createTopic(kafkaTopic,2)
 
 
       val conf = new SparkConf().setAppName("MGP_DataStreaming").setMaster("local")
-      val sc = new SparkContext(conf)
+      val sc = new SparkContext(conf);
 
       // consider the stream is going to send data every second
       val ssc = new StreamingContext(sc, Seconds(1))
 
       val props : Properties = GenericKafkaClient.avroConsumer(kafkaServer)
-
-      // check how to obtain the consumer.
-//      private val consumerConnector = Consumer.create(props)
 
       val kafkaStream = KafkaUtils.createDirectStream(
         ssc,
@@ -73,8 +69,10 @@ object KSStreamPrimaryAvroInterface {
         ssc.awaitTermination()
         println("Streaming terminated")
       }catch {
-        case e :Exception =>
+        case e :Exception => {
           println("*** Exception of streaming caught in monitor thread")
+
+        }
 
       }
       // stop spark
